@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
+  <title>Finance Helper — Финансовый помощник</title>
+
+  <!-- Fonts & Icons -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="styles.css"/>
+</head>
+<body>
+  <div class="phone-container">
+    <!-- Верхняя панель -->
+    <div class="status-bar">
+      <div class="user-info">
+        <div class="avatar">К</div>
+        <div class="app-title">Finance Helper</div>
+      </div>
+      <div class="balance">
+        <i class="fa-solid fa-star star-icon"></i>
+        <span id="totalBalance" class="balance-amount">0 ₽</span>
+        <div class="balance-actions">
+          <button class="small-btn" id="btnOpenBalanceModal">Баланс</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="scrollable-content">
+      <!-- Домашняя секция -->
+      <section id="homeSection" aria-label="Главная">
+        <h3 class="section-title">Быстрые действия</h3>
+        <button class="menu-item add-expense" id="btnOpenAddExpense">
+          <i class="fa-solid fa-plus"></i> Добавить расход
+        </button>
+        <button class="menu-item statistics" id="btnNavStatistics">
+          <i class="fa-solid fa-chart-pie"></i> Статистика
+        </button>
+        <button class="menu-item goals" id="btnNavGoals">
+          <i class="fa-solid fa-bullseye"></i> Цели
+        </button>
+        <button class="menu-item reminders" id="btnNavReminders">
+          <i class="fa-solid fa-bell"></i> Напоминания
+        </button>
+
+        <h3 class="section-title">Ежемесячные расходы</h3>
+        <div class="card">
+          <div class="chart-container">
+            <div class="pie-chart" aria-hidden="true">
+              <div id="slice1" class="pie-slice slice-1"></div>
+              <div id="slice2" class="pie-slice slice-2"></div>
+              <div id="slice3" class="pie-slice slice-3"></div>
+              <div id="slice4" class="pie-slice slice-4"></div>
+            </div>
+            <div class="chart-data">
+              <div id="chartData"></div>
+            </div>
+          </div>
+          <div class="card-actions-row">
+            <button class="small-btn" id="btnOpenEditMonthly">Редактировать категории</button>
+            <button class="card-reset-btn" id="btnResetMonthly"><i class="fa fa-trash"></i> Сброс категорий</button>
+          </div>
+        </div>
+
+        <h3 class="section-title">Последние расходы</h3>
+        <div class="card">
+          <div id="mainExpenseList" class="expense-list"></div>
+          <div class="card-actions-row">
+            <button class="small-btn" id="btnOpenAddExpense2">Добавить</button>
+            <button class="card-reset-btn" id="btnResetExpenses"><i class="fa fa-trash"></i> Сбросить все расходы</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Статистика -->
+      <section id="statisticsSection" class="hidden" aria-label="Статистика">
+        <h3 class="section-title">Статистика по категориям</h3>
+        <div class="card">
+          <div class="chart-container">
+            <div class="pie-chart" aria-hidden="true">
+              <div id="slice1_stats" class="pie-slice slice-1"></div>
+              <div id="slice2_stats" class="pie-slice slice-2"></div>
+              <div id="slice3_stats" class="pie-slice slice-3"></div>
+              <div id="slice4_stats" class="pie-slice slice-4"></div>
+            </div>
+            <div class="chart-data">
+              <div id="chartDataStats"></div>
+            </div>
+          </div>
+        </div>
+
+        <h3 class="section-title">Список расходов</h3>
+        <div class="card">
+          <div id="statsExpenseList" class="expense-list"></div>
+        </div>
+      </section>
+
+      <!-- Цели -->
+      <section id="goalsSection" class="hidden" aria-label="Цели">
+        <h3 class="section-title">Мои цели</h3>
+        <div class="card">
+          <div id="goalsList"></div>
+          <div class="card-actions-row">
+            <button class="small-btn" id="btnOpenAddGoal">Добавить цель</button>
+          </div>
+        </div>
+
+        <h3 class="section-title">Все цели</h3>
+        <div class="card">
+          <div id="goalsListFull"></div>
+        </div>
+      </section>
+
+      <!-- Напоминания -->
+      <section id="remindersSection" class="hidden" aria-label="Напоминания">
+        <h3 class="section-title">Напоминания</h3>
+        <div class="card">
+          <div id="remindersList"></div>
+          <div class="card-actions-row">
+            <button class="small-btn" id="btnOpenAddReminder">Добавить напоминание</button>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- Нижняя навигация -->
+    <nav class="bottom-nav" aria-label="Навигация">
+      <button class="nav-item active" id="navHome">
+        <i class="fa-solid fa-house"></i>
+        <div>Главная</div>
+      </button>
+      <button class="nav-item" id="navStatistics">
+        <i class="fa-solid fa-chart-line"></i>
+        <div>Статистика</div>
+      </button>
+      <button class="nav-item" id="navGoals">
+        <i class="fa-solid fa-bullseye"></i>
+        <div>Цели</div>
+      </button>
+      <button class="nav-item" id="navReminders">
+        <i class="fa-solid fa-bell"></i>
+        <div>Напоминания</div>
+      </button>
+    </nav>
+  </div>
+
+  <!-- Модалки -->
+  <div id="editMonthlyModal" class="modal" aria-hidden="true">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div class="modal-title">Редактировать категории</div>
+        <span class="close-modal" id="btnCloseEditMonthly">&times;</span>
+      </div>
+      <div id="monthlyEditList"></div>
+      <div class="card-actions-row">
+        <button class="btn" id="btnSaveMonthly">Сохранить</button>
+        <button class="card-reset-btn" id="btnResetMonthly2">Сбросить к дефолту</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="addExpenseModal" class="modal" aria-hidden="true">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div class="modal-title">Новый расход</div>
+        <span class="close-modal" id="btnCloseAddExpense">&times;</span>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Сумма</label>
+        <input id="expenseAmount" type="number" step="0.01" class="form-input" placeholder="0.00"/>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Категория</label>
+        <select id="expenseCategory" class="form-select"></select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Комментарий</label>
+        <input id="expenseComment" class="form-input" placeholder="Описание"/>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Дата</label>
+        <input id="expenseDate" type="date" class="form-input"/>
+      </div>
+      <button class="btn" id="btnSaveExpense">Добавить</button>
+    </div>
+  </div>
+
+  <div id="resetBalanceModal" class="modal" aria-hidden="true">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div class="modal-title">Установить баланс</div>
+        <span class="close-modal" id="btnCloseBalanceModal">&times;</span>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Новый баланс</label>
+        <input id="newBalanceAmount" type="number" step="0.01" class="form-input" placeholder="0.00"/>
+      </div>
+      <button class="btn" id="btnSaveBalance">Сохранить</button>
+    </div>
+  </div>
+
+  <div id="addGoalModal" class="modal" aria-hidden="true">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div class="modal-title">Новая цель</div>
+        <span class="close-modal" id="btnCloseAddGoal">&times;</span>
+      </div>
+      <div class="form-group"><label class="form-label">Название</label><input id="goalTitle" class="form-input"/></div>
+      <div class="form-group"><label class="form-label">Целевая сумма</label><input id="goalTarget" type="number" step="0.01" class="form-input"/></div>
+      <div class="form-group"><label class="form-label">Уже накоплено</label><input id="goalSaved" type="number" step="0.01" class="form-input"/></div>
+      <div class="form-group"><label class="form-label">Комментарий</label><input id="goalComment" class="form-input"/></div>
+      <button class="btn" id="btnAddGoal">Добавить</button>
+    </div>
+  </div>
+
+  <div id="contributeModal" class="modal" aria-hidden="true">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div class="modal-title">Внести в цель</div>
+        <span class="close-modal" id="btnCloseContribute">&times;</span>
+      </div>
+      <div class="form-group"><label class="form-label">Сумма</label><input id="contributeAmount" type="number" step="0.01" class="form-input"/></div>
+      <button class="btn" id="btnContributeGoal">Внести</button>
+    </div>
+  </div>
+
+  <div id="addReminderModal" class="modal" aria-hidden="true">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div class="modal-title">Новое напоминание</div>
+        <span class="close-modal" id="btnCloseAddReminder">&times;</span>
+      </div>
+      <div class="form-group"><label class="form-label">Название</label><input id="reminderTitleInput" class="form-input"/></div>
+      <div class="form-group"><label class="form-label">Дата и время</label><input id="reminderDatetime" type="datetime-local" class="form-input"/></div>
+      <div class="form-group"><label class="form-label">Комментарий</label><input id="reminderComment" class="form-input"/></div>
+      <button class="btn" id="btnAddReminder">Добавить</button>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="app.js"></script>
+</body>
+</html>
